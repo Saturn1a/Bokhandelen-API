@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "nG9i7VOHCDbb3BfkDAucwJrRnJV4Y7buedOy2mUKKIY=",
+  "Source": "BokhandelensRESTApi",
+  "BasePath": "_content/BokhandelensRESTApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
