@@ -5,10 +5,10 @@ namespace BokhandelensRESTApi.Repository;
 public interface IBookRepository
 {
     IEnumerable<Book> GetAll();
-    Book GetBookById(int id);
+    Book? GetById(int id);
     Book Add(Book book);
-    Book Update(Book book);
-    Book Delete(int id);
+    Book? Update(int id, Book book);
+    Book? Delete(int id);
 
 
 }

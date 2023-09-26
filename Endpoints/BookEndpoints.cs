@@ -3,6 +3,8 @@ using BokhandelensRESTApi.DATA;
 using BokhandelensRESTApi.Repository;
 using System;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BokhandelensRESTApi.Endpoints;
 
@@ -11,25 +13,40 @@ public static class BookEndpoints
     public static void MapBookEndpoints(this WebApplication app)
     {
         app.MapGet("/books", GetBooks).WithName("GetBooks").WithOpenApi();
-        /*
+        
         app.MapGet("/books/{id}", GetbyId).WithName("GetById").WithOpenApi();
-
+        
         app.MapPost("/books", AddBook).WithName("AddBook").WithOpenApi();
-
+        
         app.MapPut("/books/{id}", UpdateBook).WithName("UpdateBook").WithOpenApi();
-
+        
         app.MapDelete("/books/{id}", DeleteBook).WithName("DeleteBook").WithOpenApi();
-        */
+   
     }
 
 
-    private static IResult GetBooks(IBookRepository repo, ILogger<Program> logger)
+
+    // ENDPOINTS
+    private static IResult GetBooks(IBookRepository repo, ILogger<Program> logger, [FromQuery] string? title, [FromQuery] string? author, [FromQuery] int? publicationYear)
     {
+        // FILTERS
+        if (title != null)
+        {
+            return Results.Ok(repo.GetAll().Where(b => b.Title == title));
+        }
+        if (author != null)
+        {
+            return Results.Ok(repo.GetAll().Where(b => b.Author == author));
+        }
+
+        if (publicationYear != null)
+        {
+            return Results.Ok(repo.GetAll().Where(b => b.PublicationYear == publicationYear));
+        }
+
         return Results.Ok(repo.GetAll());
     }
 
-
-    /*
     private static IResult GetbyId(IBookRepository repo, int id)
     {
         if (repo == null)
@@ -41,7 +58,7 @@ public static class BookEndpoints
         return Results.NotFound($"Could not find book with id:{id}");
 
     }
-
+    
     private static IResult AddBook(IBookRepository repo, Book book)
     {
 
@@ -54,26 +71,26 @@ public static class BookEndpoints
         return Results.NoContent();
 
     }
-
+    
     private static IResult DeleteBook(IBookRepository repo, int id)
     {
-        var PersonToDelete = repo.Delete(id);
-        if (PersonToDelete == null)
-            return Results.NotFound("Person with that Id does not exist");
-        return Results.Ok(PersonToDelete);
+        var bookToDelete = repo.Delete(id);
+        if (bookToDelete == null)
+            return Results.NotFound($"Book with id:{id} does not exist");
+        return Results.Ok(bookToDelete);
     }
-
+    
     private static IResult UpdateBook(IBookRepository repo, int id, Book book)
     {
-        var personToUpdate = repo.Update(id, Book);
-        if (personToUpdate == null)
-            return Results.NotFound($"Cant find person to update with id:{id}");
+        var updatedBook = repo.Update(id, book);
+        if (updatedBook == null)
+            return Results.NotFound($"Cant find book to update with id:{id}");
 
-        return Results.Ok(personToUpdate);
+        return Results.Ok(updatedBook);
 
     }
 
-   */
+   
 
 
 
